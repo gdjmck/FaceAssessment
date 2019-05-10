@@ -22,7 +22,8 @@ class FaceAssess(nn.Module):
         self.extractor = extractors.resnet50(pretrained=True)
         self.conv1 = nn.Sequential(nn.Conv2d(2048, 1024, 1), 
                                     nn.BatchNorm2d(1024),
-                                    nn.ReLU(inplace=True))
+                                    nn.ReLU(inplace=True),
+                                    nn.MaxPool2d(kernel_size=(2, 2)))
         self.sep_squeeze_1 = SeparableBlock(1024, 512)
         self.sep_compact_1 = SeparableBlock(512, 512, stride=2)
         self.sep_squeeze_2 = SeparableBlock(512, 256)
