@@ -9,7 +9,7 @@ from torch.utils import model_zoo
 from torchvision.models.densenet import densenet121, densenet161
 from torchvision.models.squeezenet import squeezenet1_1
 
-pretrain_folder = './model/pretrain_model'
+pretrain_folder = './pretrain_model'
 
 def load_weights_sequential(target, source_state):
     """
