@@ -6,7 +6,7 @@ import extractors
 class SeparableBlock(nn.Module):
     def __init__(self, in_chan, out_chan, kernel_size=3, stride=1, padding=1):
         super(SeparableBlock, self).__init__()
-        self.depth_wise_conv = nn.Conv2d(in_chan, in_chan, kernel_size=kernel_size, stride=stride padding=padding, groups=in_chan)
+        self.depth_wise_conv = nn.Conv2d(in_chan, in_chan, kernel_size=kernel_size, stride=stride, padding=padding, groups=in_chan)
         self.pt_wise_conv = nn.Conv2d(in_chan, out_chan, kernel_size=1, stride=1)
         self.op = nn.Sequential(self.depth_wise_conv, 
                                 self.pt_wise_conv, 
