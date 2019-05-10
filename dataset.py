@@ -6,6 +6,12 @@ from skimage import io
 def get_file_path(folder):
     return [os.path.join(folder, f) for f in os.listdir(folder)]
 
+def np2Tensor(array):
+    ts = (2, 0, 1)
+    tmp = array.copy()
+    tensor = torch.FloatTensor(tmp.transpose(ts).astype(float))    
+    return tensor
+
 class AssessSet(data.Dataset):
     def __init__(self, root_folder):
         super(AssessSet, self).__init__()
@@ -31,5 +37,6 @@ class AssessSet(data.Dataset):
 
     def __getitem__(self, index):
         img = io.imread(self.img_files[index])
+        img = np2Tensor(img)
         score = self.degree_to_score(self.img_degree[index])
         return {'img': img, 'score': score}
