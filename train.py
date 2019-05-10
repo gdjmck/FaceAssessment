@@ -9,7 +9,8 @@ from utils.loss import hinge_loss
 def main():
     model_assess = model.FaceAssess()
     dataloader = DataLoader(dataset=dataset.AssessSet('high-res'),
-                            batch_size=1, shuffle=True, drop_last=False)
+                            batch_size=1, shuffle=True, 
+                            num_workers=4, drop_last=False)
     
     model_assess.train()
     extractor_params = model_assess.extractor.parameters()
@@ -24,9 +25,7 @@ def main():
             score = sample['score']
 
             score_pred = model_assess(img)
-            print('score_pred', score_pred.item(), 'score_gt', score.item())
             loss = hinge_loss(score_pred, score)
-            print('loss', loss.item())
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()

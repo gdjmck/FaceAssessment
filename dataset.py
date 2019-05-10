@@ -9,7 +9,7 @@ def get_file_path(folder):
 def np2Tensor(array):
     ts = (2, 0, 1)
     tmp = array.copy()
-    tensor = torch.FloatTensor(tmp.transpose(ts).astype(float))    
+    tensor = torch.FloatTensor(tmp.transpose(ts).astype(float))
     return tensor
 
 class AssessSet(data.Dataset):
@@ -37,6 +37,7 @@ class AssessSet(data.Dataset):
 
     def __getitem__(self, index):
         img = io.imread(self.img_files[index])
+        img -= (115., 98., 87.6)
         img = np2Tensor(img)
         score = torch.FloatTensor([self.degree_to_score(self.img_degree[index])])
         print('img', img.shape, 'score', type(score))
