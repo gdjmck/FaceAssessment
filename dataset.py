@@ -23,6 +23,9 @@ class AssessSet(data.Dataset):
             self.img_files += full_paths
             self.img_degree += [i] * len(full_paths)
 
+    def __len__(self):
+        return len(self.img_files)
+
     def degree_to_score(self, degree):
         return self.degree_table[str(degree)]
 
