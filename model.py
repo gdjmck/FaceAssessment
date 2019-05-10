@@ -46,7 +46,7 @@ class FaceAssess(nn.Module):
         feat = self.sep_compact_3(feat) # -> (-1, 128, 1/128, 1/128)  2x2
         feat = self.sep_squeeze_4(feat) # -> (-1, 64, 1/128, 1/128)  2x2
         feat = F.max_pool2d(feat, kernel_size=2)
-        feat = feat.reshape((-1,))
+        feat = torch.flatten(feat, 1, -1)
         score = self.linear(feat)
         score = F.sigmoid(score)
         # 让一些Layer负责监测有没有人脸，另外的做区域模糊监测，或者只对人脸检测层加regularization
