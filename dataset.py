@@ -38,5 +38,6 @@ class AssessSet(data.Dataset):
     def __getitem__(self, index):
         img = io.imread(self.img_files[index])
         img = np2Tensor(img)
-        score = self.degree_to_score(self.img_degree[index])
+        score = torch.FloatTensor([self.degree_to_score(self.img_degree[index])])
+        print('img', img.shape, 'score', type(score))
         return {'img': img, 'score': score}

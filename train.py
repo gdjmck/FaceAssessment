@@ -24,7 +24,9 @@ def main():
             score = sample['score']
 
             score_pred = model_assess(img)
+            print('score_pred', score_pred.item(), 'score_gt', score.item())
             loss = hinge_loss(score_pred, score)
+            print('loss', loss.item())
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
