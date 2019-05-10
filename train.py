@@ -9,7 +9,7 @@ from utils.loss import hinge_loss
 def main():
     model_assess = model.FaceAssess()
     dataloader = DataLoader(dataset=dataset.AssessSet('high-res'),
-                            batch_size=6, shuffle=True, drop_last=True)
+                            batch_size=1, shuffle=True, drop_last=True)
     
     model_assess.train()
     extractor_params = model_assess.extractor.parameters()
