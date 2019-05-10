@@ -33,7 +33,7 @@ class FaceAssess(nn.Module):
         self.linear = nn.Linear(64, 1)
 
     def forward(self, x):
-        feat = self.extractor(x) # -> (-1, 2048, 1/8, 1/8)
+        feat = self.extractor(x)[0] # -> (-1, 2048, 1/8, 1/8)
         # 对feat做ROI pooling到 (-1, -1, 32, 32)
         feat = F.adaptive_max_pool2d(feat, output_size=(32, 32))
         feat = self.conv1(feat) # -> (-1, 1024, 1/16, 1/16)  16x16
