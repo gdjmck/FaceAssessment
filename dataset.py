@@ -1,7 +1,6 @@
 import os
 import torch
 import torch.utils.data as data
-#from skimage import io
 from PIL import Image
 
 def get_file_path(folder):
@@ -41,7 +40,6 @@ class AssessSet(data.Dataset):
         return self.degree_table[str(degree)]
 
     def __getitem__(self, index):
-        #img = io.imread(self.img_files[index]).astype('float')
         img = Image.open(self.img_files[index])
         if self.transform is not None:
             img = self.transform(img)
