@@ -58,10 +58,10 @@ class Train_Log():
     def load_model(self, model):
 
         lastest_out_path = "{}/ckpt_lastest.pth".format(self.save_dir_model)
-        if self.args.without_gpu: # 用cpu载入模型到内存
-            ckpt = torch.load(lastest_out_path, map_location='cpu')
-        else: # 模型载入到显存
+        if self.args.gpu:
             ckpt = torch.load(lastest_out_path)
+        else:
+            ckpt = torch.load(lastest_out_path, map_location='cpu')
         state_dict = ckpt['state_dict'].copy()
         for key in ckpt['state_dict']:
             if key not in model.state_dict():

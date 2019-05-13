@@ -30,6 +30,12 @@ def main():
     start_epoch = 0
     if args.resume:
         start_epoch, model_assess = logger.load_model(model_assess)
+    device = torch.device('CPU')
+    if args.gpu:
+        if torch.cuda.is_available():
+            device = torch.device('cuda')
+        else:
+            print('NO GPU AVAILABLE, USE CPU INSTEAD.')
 
     transform = transforms.Compose([transforms.Resize(512),
                                     transforms.RandomHorizontalFlip(),
@@ -59,8 +65,8 @@ def main():
 
         model_assess.train()
         for i, sample in enumerate(train_loader):
-            img = sample['img']
-            score = sample['score']
+            img = sample['img'].to(device)
+            score = sample['score'].to(device)
 
             score_pred = model_assess(img)
             loss = hinge_loss(score_pred, score)
@@ -77,8 +83,8 @@ def main():
         loss_val_, acc_val_ = 0., 0.
         model_assess.eval()
         for j, sample in enumerate(val_loader):
-            img = sample['img']
-            score = sample['score']
+            img = sample['img'].to(device)
+            score = sample['score'].to(device)
             score_pred = model_assess(img)
             loss_val_ += hinge_loss(score_pred, score).item()
             acc_val_ += accuracy(score_pred, score)
