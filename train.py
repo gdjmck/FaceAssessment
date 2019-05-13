@@ -1,3 +1,6 @@
+from utils.log import Train_Log
+from utils.loss import hinge_loss, accuracy
+from utils.arguments import get_args
 import torch
 from torch.utils.data import DataLoader
 from torch.utils.data.sampler import SubsetRandomSampler
@@ -6,9 +9,6 @@ import numpy as np
 import model
 import dataset
 from torchvision import transforms
-from utils.loss import hinge_loss, accuracy
-from utils.log import Train_Log
-from utils.arguments import get_args
 
 val_split = 0.2
 shuffle_dataset = True
