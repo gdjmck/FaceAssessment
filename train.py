@@ -64,7 +64,7 @@ def main():
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-        print('epoch %d acc: %.4f\t loss: %.4f' %(epoch, acc_/len(train_loader, loss_/len(train_loader))))
+        print('epoch %d acc: %.4f\t loss: %.4f' %(epoch, acc_/len(train_loader), loss_/len(train_loader)))
 
         # eval on valid set
         loss_val_, acc_val_ = 0., 0.
