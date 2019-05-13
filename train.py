@@ -11,9 +11,9 @@ def main():
     model_assess = model.FaceAssess()
 
     transform = transforms.Compose([transforms.Resize(512),
-                                    transforms.Normalize(mean=(115., 98., 87.6), std=(1, 1, 1)),
                                     transforms.RandomHorizontalFlip(),
-                                    transforms.ToTensor()])
+                                    transforms.ToTensor()
+                                    transforms.Normalize(mean=(115., 98., 87.6), std=(1, 1, 1)),])
     dataloader = DataLoader(dataset=dataset.AssessSet('high-res', transform=transform),
                             batch_size=1, shuffle=True, 
                             num_workers=4, drop_last=False)
