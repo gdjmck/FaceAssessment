@@ -30,7 +30,7 @@ def main():
     start_epoch = 0
     if args.resume:
         start_epoch, model_assess = logger.load_model(model_assess)
-    device = torch.device('CPU')
+    device = torch.device('cpu')
     if args.gpu:
         if torch.cuda.is_available():
             device = torch.device('cuda')
