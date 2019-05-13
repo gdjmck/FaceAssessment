@@ -7,9 +7,13 @@ import model
 import dataset
 from torchvision import transforms
 from utils.loss import hinge_loss, accuracy
+from utils.log import Train_Log
+from utils.arguments import get_args
 
 val_split = 0.2
 shuffle_dataset = True
+args = get_args()
+logger = Train_Log(args)
 
 def gen_split_sampler(dataset):
     dataset_size = len(dataset)
@@ -23,13 +27,16 @@ def gen_split_sampler(dataset):
 
 def main():
     model_assess = model.FaceAssess()
+    start_epoch = 0
+    if args.resume:
+        start_epoch, model_assess = logger.load_model(model_assess)
 
     transform = transforms.Compose([transforms.Resize(512),
                                     transforms.RandomHorizontalFlip(),
                                     transforms.ToTensor(),
                                     transforms.Normalize(mean=(115., 98., 87.6), std=(128, 128, 128))])
     
-    data = dataset.AssessSet('high-res', transform=transform)
+    data = dataset.AssessSet(args.dataDir, transform=transform)
     train_sampler, val_sampler = gen_split_sampler(data)
     train_loader = DataLoader(dataset=data,
                             batch_size=1, shuffle=False, 
@@ -43,10 +50,11 @@ def main():
     extractor_params = model_assess.extractor.parameters()
     optimizer = Adam([
         {'params': [p for p in model_assess.parameters() if p not in extractor_params]},
-        {'params': model_assess.extractor.parameters(), 'lr':1e-5}
-    ], lr=1e-4)
+        {'params': model_assess.extractor.parameters(), 'lr':0.1*args.lr}
+    ], lr=args.lr)
 
-    for epoch in range(100):
+    best_val_acc, best_val_loss = 0., 10
+    for epoch in range(start_epoch, start_epoch+args.epochs):
         loss_, acc_ = 0., 0.
 
         model_assess.train()
@@ -64,7 +72,8 @@ def main():
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-        print('epoch %d acc: %.4f\t loss: %.4f' %(epoch, acc_/len(train_loader), loss_/len(train_loader)))
+            logger.step()
+        print('epoch %d acc: %.4f\t loss: %.4f' %(epoch, acc_/(i+1), loss_/(i+1)))
 
         # eval on valid set
         loss_val_, acc_val_ = 0., 0.
@@ -77,7 +86,12 @@ def main():
             score_pred = model_assess(img)
             loss_val_ += hinge_loss(score_pred, score).item()
             acc_val_ += accuracy(score_pred, score)
-        print('\teval acc: %.4f\t loss: %.4f' %(acc_val_/len(val_loader), loss_val_/len(val_loader)))
+        avg_loss, avg_acc = loss_val_/(j+1), acc_val_/(j+1)
+        print('\teval acc: %.4f\t loss: %.4f' %(avg_acc, avg_loss))
+        if avg_loss <= best_val_loss and avg_acc > best_val_acc:
+            best_val_loss = avg_loss
+            best_val_acc = avg_acc
+            logger.save_model(model_assess, epoch)
 
         
 
