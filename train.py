@@ -59,8 +59,6 @@ def main():
 
         model_assess.train()
         for i, sample in enumerate(train_loader):
-            if i > 10:
-                break
             img = sample['img']
             score = sample['score']
 
@@ -68,7 +66,7 @@ def main():
             loss = hinge_loss(score_pred, score)
             acc_ += accuracy(score_pred, score)
             loss_ += loss.item()
-            print('loss:%.4f \tscore_pred:%.4f \tscore_gt:%.4f'% (loss.item(), score_pred.item(), score.item()))
+            print('sample %d:\tloss:%.4f \tscore_pred:%.4f \tscore_gt:%.4f'% (i, loss.item(), score_pred.item(), score.item()))
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
@@ -79,8 +77,6 @@ def main():
         loss_val_, acc_val_ = 0., 0.
         model_assess.eval()
         for j, sample in enumerate(val_loader):
-            if j > 5:
-                break
             img = sample['img']
             score = sample['score']
             score_pred = model_assess(img)
@@ -92,6 +88,7 @@ def main():
             best_val_loss = avg_loss
             best_val_acc = avg_acc
             logger.save_model(model_assess, epoch)
+            print('save best model at epoch ', epoch)
 
         
 
