@@ -13,8 +13,12 @@ def np2Tensor(array):
     return tensor
 
 class AssessSet(data.Dataset):
-    def __init__(self, root_folder):
+    '''
+        #TODO: 添加最大尺寸的scale
+    '''
+    def __init__(self, root_folder, transform=None):
         super(AssessSet, self).__init__()
+        self.transform = transform
         self.degree_table = {'0': 1.0,
                             '1': 0.8,
                             '2': 0.6,
@@ -37,7 +41,7 @@ class AssessSet(data.Dataset):
 
     def __getitem__(self, index):
         img = io.imread(self.img_files[index]).astype('float')
-        img -= (115., 98., 87.6)
-        img = np2Tensor(img)
+        if self.transform is not None:
+            img = self.transform(img)
         score = torch.FloatTensor([self.degree_to_score(self.img_degree[index])])
         return {'img': img, 'score': score}
