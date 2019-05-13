@@ -29,13 +29,13 @@ def main():
                                     transforms.ToTensor(),
                                     transforms.Normalize(mean=(115., 98., 87.6), std=(128, 128, 128))])
     
-    dataset = dataset.AssessSet('high-res', transform=transform)
-    train_sampler, val_sampler = gen_split_sampler(dataset)
-    train_loader = DataLoader(dataset=dataset,
+    data = dataset.AssessSet('high-res', transform=transform)
+    train_sampler, val_sampler = gen_split_sampler(data)
+    train_loader = DataLoader(dataset=data,
                             batch_size=1, shuffle=False, 
                             num_workers=4, drop_last=False,
                             sampler=train_sampler)
-    val_loader = DataLoader(dataset=dataset, 
+    val_loader = DataLoader(dataset=data, 
                             batch_size=1, shuffle=False,
                             num_workers=1, drop_last=False,
                             sampler=val_sampler)
