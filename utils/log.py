@@ -15,10 +15,10 @@ class Train_Log():
         if not os.path.exists(self.save_dir_model):
             os.makedirs(self.save_dir_model)
 
-        if os.path.exists(self.save_dir + '/log.txt'):
-            self.logFile = open(self.save_dir + '/log.txt', 'a')
+        if os.path.exists(args.saveDir + '/log.txt'):
+            self.logFile = open(args.saveDir + '/log.txt', 'a')
         else:
-            self.logFile = open(self.save_dir + '/log.txt', 'w')
+            self.logFile = open(args.saveDir + '/log.txt', 'w')
 
     def add_scalar(self, scalar_name, scalar, step=None):
         if step is None:
