@@ -20,10 +20,10 @@ class AssessSet(data.Dataset):
         super(AssessSet, self).__init__()
         self.transform = transform
         self.degree_table = {'0': 1.0,
-                            '1': 0.8,
-                            '2': 0.6,
-                            '3': 0.4,
-                            '4': 0.2}
+                            '1': 0,
+                            '2': 0,
+                            '3': 0,
+                            '4': 0}
         self.num_degree = len(os.listdir(root_folder))
         self.img_files = []
         self.img_degree = []

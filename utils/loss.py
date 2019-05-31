@@ -10,3 +10,5 @@ def hinge_loss(output, target):
 
 def accuracy(output, target):
     return 1 if torch.abs(output - target).item() < 0.1 else 0
+
+bce_loss = torch.nn.BCELoss()

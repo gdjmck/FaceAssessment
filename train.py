@@ -1,5 +1,5 @@
 from utils.log import Train_Log
-from utils.loss import hinge_loss, accuracy
+from utils.loss import hinge_loss, accuracy, bce_loss
 from utils.arguments import get_args
 import torch
 from torch.utils.data import DataLoader
@@ -69,7 +69,7 @@ def main():
             score = sample['score'].to(device)
 
             score_pred = model_assess(img)
-            loss = hinge_loss(score_pred, score)
+            loss = bce_loss(score_pred, score)
             acc_ += accuracy(score_pred, score)
             loss_ += loss.item()
             print('sample %d:\tloss:%.4f \tscore_pred:%.4f \tscore_gt:%.4f'% (i, loss.item(), score_pred.item(), score.item()))
@@ -86,7 +86,7 @@ def main():
             img = sample['img'].to(device)
             score = sample['score'].to(device)
             score_pred = model_assess(img)
-            loss_val_ += hinge_loss(score_pred, score).item()
+            loss_val_ += bce_loss(score_pred, score).item()
             acc_val_ += accuracy(score_pred, score)
         avg_loss, avg_acc = loss_val_/(j+1), acc_val_/(j+1)
         print('\teval acc: %.4f\t loss: %.4f' %(avg_acc, avg_loss))
