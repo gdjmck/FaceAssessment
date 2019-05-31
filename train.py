@@ -34,6 +34,7 @@ def main():
     if args.gpu:
         if torch.cuda.is_available():
             device = torch.device('cuda')
+            model_assess.to(device)
         else:
             print('NO GPU AVAILABLE, USE CPU INSTEAD.')
 
