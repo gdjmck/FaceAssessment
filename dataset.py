@@ -62,5 +62,5 @@ class AssessSet(data.Dataset):
             good = [self.transform(Image.fromarray(item)) for item in good]
             bad = [self.transform(item) for item in bad]
         #score = torch.FloatTensor([self.degree_to_score(self.img_degree[index])])
-        return [{'img': item, 'score': torch.FloatTensor([1])} for item in good] + 
+        return [{'img': item, 'score': torch.FloatTensor([1])} for item in good] + \
                 [{'img': item, 'score': torch.FloatTensor([0])} for item in bad]
