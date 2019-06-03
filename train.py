@@ -69,13 +69,14 @@ def main():
         model_assess.train()
         for i, sample in enumerate(train_loader):
             img = sample['img'].to(device)
+            #print('batch shape:', img.shape)
             score = sample['score'].to(device)
 
             score_pred = model_assess(img)
             loss = bce_loss(score_pred, score)
             acc_ += accuracy(score_pred, score)
             loss_ += loss.item()
-            print('sample %d:\tloss:%.4f \tscore_pred:%.4f \tscore_gt:%.4f'% (i, loss.item(), score_pred.item(), score.item()))
+            print('sample %d:\tloss:%.4f'% (i, loss.mean()))
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()

@@ -9,6 +9,9 @@ def hinge_loss(output, target):
     return torch.mean(torch.max(L1_abs, torch.FloatTensor([0.05])))
 
 def accuracy(output, target):
-    return 1 if torch.abs(output - target).item() < 0.1 else 0
+    # print('output:', output, '\ttarget:', target)
+    acc = (torch.abs(output - target) < 0.1).sum() / target.numel()
+    # print('acc:', acc, 'number of elements', target.numel())
+    return acc
 
 bce_loss = torch.nn.BCELoss()
