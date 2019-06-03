@@ -39,7 +39,7 @@ def main():
             print('NO GPU AVAILABLE, USE CPU INSTEAD.')
 
     transform = transforms.Compose([transforms.Resize(512),
-                                    transforms.RandomHorizontalFlip(),
+                                    #transforms.RandomHorizontalFlip(),
                                     transforms.ToTensor(),
                                     transforms.Normalize(mean=(115., 98., 87.6), std=(128, 128, 128))])
     
@@ -48,11 +48,13 @@ def main():
     train_loader = DataLoader(dataset=data,
                             batch_size=1, shuffle=False, 
                             num_workers=4, drop_last=False,
-                            sampler=train_sampler)
+                            sampler=train_sampler,
+                            collate_fn=dataset.my_collate)
     val_loader = DataLoader(dataset=data, 
                             batch_size=1, shuffle=False,
                             num_workers=1, drop_last=False,
-                            sampler=val_sampler)
+                            sampler=val_sampler,
+                            collate_fn=dataset.my_collate)
     
     extractor_params = model_assess.extractor.parameters()
     optimizer = Adam([
