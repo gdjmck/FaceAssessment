@@ -41,7 +41,7 @@ class AssessSet(data.Dataset):
         self.img_files = []
         self.img_degree = []
 
-        full_paths = get_file_path(os.path.join(root_folder, 'blur0')
+        full_paths = get_file_path(os.path.join(root_folder, 'blur0'))
         self.img_files += full_paths
 
     def __len__(self):
@@ -51,7 +51,7 @@ class AssessSet(data.Dataset):
     def degree_to_score(self, degree):
         return self.degree_table[str(degree)]
     '''
-    
+
     def __getitem__(self, index):
         img = Image.open(self.img_files[index])
         img = cv2.imread(self.img_files[index], -1)
