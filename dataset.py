@@ -55,12 +55,12 @@ class AssessSet(data.Dataset):
 
     def __getitem__(self, index):
         img = Image.open(self.img_files[index])
-        img = cv2.imread(self.img_files[index], -1)
-        img_b = brighten(img, ratio=np.random.randint(90, 110)/100)
-        good = [img, img_b]
-        bad = [Image.open(self.img_files[index].replace('blur0', 'blur'+str(i))) for i in np.random.choice(self.img_degree, 2, replace=False)]
+        #img = cv2.imread(self.img_files[index], -1)
+        #img_b = brighten(img, ratio=np.random.randint(90, 110)/100)
+        good = [img]#, img_b
+        bad = [Image.open(self.img_files[index].replace('blur0', 'blur'+str(i))) for i in np.random.choice(self.img_degree, 1, replace=False)]
         if self.transform is not None:
-            good = [self.transform(Image.fromarray(item)) for item in good]
+            good = [self.transform(item) for item in good]
             bad = [self.transform(item) for item in bad]
         #score = torch.FloatTensor([self.degree_to_score(self.img_degree[index])])
         return [{'img': item, 'score': torch.FloatTensor([1])} for item in good] + \
