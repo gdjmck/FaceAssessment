@@ -39,7 +39,7 @@ def main():
             print('NO GPU AVAILABLE, USE CPU INSTEAD.')
 
     transform = transforms.Compose([transforms.Resize(512),
-                                    #transforms.RandomHorizontalFlip(),
+                                    transforms.RandomHorizontalFlip(),
                                     transforms.ToTensor(),
                                     transforms.Normalize(mean=(115., 98., 87.6), std=(128, 128, 128))])
     

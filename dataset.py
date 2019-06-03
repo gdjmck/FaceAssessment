@@ -40,7 +40,7 @@ class AssessSet(data.Dataset):
         '''
         self.num_degree = len(os.listdir(root_folder))
         self.img_files = []
-        self.img_degree = []
+        self.img_degree = list(range(1, 5))
 
         full_paths = get_file_path(os.path.join(root_folder, 'blur0'))
         self.img_files += full_paths
@@ -57,8 +57,8 @@ class AssessSet(data.Dataset):
         img = Image.open(self.img_files[index])
         img = cv2.imread(self.img_files[index], -1)
         img_b = brighten(img, ratio=np.random.randint(90, 110)/100)
-        good = [img, cv2.flip(img, 1), img_b, cv2.flip(img_b, 1)]
-        bad = [Image.open(self.img_files[index].replace('blur0', 'blur'+str(i))) for i in range(1, 5)]
+        good = [img, img_b]
+        bad = [Image.open(self.img_files[index].replace('blur0', 'blur'+str(i))) for i in np.random.choice(self.img_degree, 2, replace=False)]
         if self.transform is not None:
             good = [self.transform(Image.fromarray(item)) for item in good]
             bad = [self.transform(item) for item in bad]
