@@ -2,6 +2,7 @@ import os
 import torch
 import torch.utils.data as data
 import numpy as np
+import cv2
 from PIL import Image
 
 def get_file_path(folder):
