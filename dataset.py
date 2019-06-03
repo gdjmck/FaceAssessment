@@ -20,9 +20,9 @@ def brighten(im_bgr, ratio=1.1):
     return cv2.cvtColor(np.clip(img_hsv, 0, 255).astype(np.uint8), cv2.COLOR_HSV2BGR)
 
 def my_collate(batch):
-    data = [item['img'] for item in batch]
-    label = [item['score'] for item in batch]
-    return torch.stack(data, 0), torch.stack(label, 0)
+    data = [item['img'] for item in batch[0]]
+    label = [item['score'] for item in batch[0]]
+    return {'img': torch.stack(data, 0), 'score': torch.stack(label, 0)}
 
 class AssessSet(data.Dataset):
     '''
