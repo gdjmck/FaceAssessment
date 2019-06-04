@@ -10,7 +10,7 @@ def hinge_loss(output, target):
 
 def accuracy(output, target):
     # print('output:', output, '\ttarget:', target)
-    acc = (torch.abs(output - target) < 0.1).sum() / target.numel()
+    acc = (torch.abs(output - target) < 0.1).sum(dtype=torch.float) / target.numel()
     # print('acc:', acc, 'number of elements', target.numel())
     return acc
 
