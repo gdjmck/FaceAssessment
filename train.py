@@ -35,7 +35,6 @@ def main():
     if args.gpu:
         if torch.cuda.is_available():
             device = torch.device('cuda')
-            model_assess.to(device)
         else:
             print('NO GPU AVAILABLE, USE CPU INSTEAD.')
 
@@ -67,6 +66,7 @@ def main():
     for epoch in range(start_epoch, start_epoch+args.epochs):
         loss_, acc_ = 0., 0.
         model_assess.train()
+        model_assess.to(device)
         for i, sample in enumerate(train_loader):
             img = sample['img'].to(device)
             #print('batch shape:', img.shape)
@@ -86,6 +86,7 @@ def main():
         # eval on valid set
         loss_val_, acc_val_ = 0., 0.
         model_assess.eval()
+        model_assess.to(device_test)
         for j, sample in enumerate(val_loader):
             img = sample['img'].to(device_test)
             score = sample['score'].to(device_test)
