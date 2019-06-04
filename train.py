@@ -74,9 +74,10 @@ def main():
 
             score_pred = model_assess(img)
             loss = bce_loss(score_pred, score)
-            acc_ += accuracy(score_pred, score)
+            acc = accuracy(score_pred, score)
+            acc_ += acc
             loss_ += loss.item()
-            print('sample %d:\tloss:%.4f'% (i, loss.mean()))
+            print('sample %d:\tloss:%.4f\tacc:%.4f'% (i, loss.mean(), acc.item()))
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
