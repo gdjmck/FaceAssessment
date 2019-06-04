@@ -30,6 +30,7 @@ def main():
     start_epoch = 0
     if args.resume:
         start_epoch, model_assess = logger.load_model(model_assess)
+    device_test = torch.device('cpu')
     device = torch.device('cpu')
     if args.gpu:
         if torch.cuda.is_available():
@@ -86,8 +87,8 @@ def main():
         loss_val_, acc_val_ = 0., 0.
         model_assess.eval()
         for j, sample in enumerate(val_loader):
-            img = sample['img'].to(device)
-            score = sample['score'].to(device)
+            img = sample['img'].to(device_test)
+            score = sample['score'].to(device_test)
             score_pred = model_assess(img)
             loss_val_ += bce_loss(score_pred, score).item()
             acc_val_ += accuracy(score_pred, score)
