@@ -10,7 +10,7 @@ import model
 import dataset
 from torchvision import transforms
 
-val_split = 0.2
+val_split = 0.1
 shuffle_dataset = True
 args = get_args()
 logger = Train_Log(args)
@@ -65,7 +65,6 @@ def main():
     best_val_acc, best_val_loss = 0., 10
     for epoch in range(start_epoch, start_epoch+args.epochs):
         loss_, acc_ = 0., 0.
-
         model_assess.train()
         for i, sample in enumerate(train_loader):
             img = sample['img'].to(device)

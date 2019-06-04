@@ -9,5 +9,6 @@ def get_args():
 
     parser.add_argument('--lr', default=1e-4, help='learning rate')
     parser.add_argument('--epochs', default=100, help='training epochs')
+    parser.add_argument('--test', action='store_true', default=False, help='run a test epoch')
 
     return parser.parse_args()
