@@ -10,9 +10,9 @@ import model
 import dataset
 from torchvision import transforms
 
-val_split = 0.1
 shuffle_dataset = True
 args = get_args()
+val_split = args.test_split
 logger = Train_Log(args)
 
 def gen_split_sampler(dataset):
