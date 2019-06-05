@@ -7,7 +7,7 @@ def get_args():
     parser.add_argument('--resume', action='store_true', default=False, help='resume previous training')
     parser.add_argument('--gpu', action='store_true', default=False, help='use gpu')
 
-    parser.add_argument('--lr', default=1e-4, help='learning rate')
+    parser.add_argument('--lr', default=1e-4, type=float, help='learning rate')
     parser.add_argument('--epochs', default=100, help='training epochs')
     parser.add_argument('--test', action='store_true', default=False, help='run a test epoch')
     parser.add_argument('--test_split', type=float, default=0.2, help='ratio of testset to split train and test set')
