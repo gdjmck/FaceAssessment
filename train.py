@@ -25,6 +25,20 @@ def gen_split_sampler(dataset):
     train_indices, val_indices = indices[val_size:], indices[:val_size]
     return SubsetRandomSampler(train_indices), SubsetRandomSampler(val_indices)
 
+def evaluate(model, testset, device):
+    # eval on valid set
+    loss_val_, acc_val_ = 0., 0.
+    model.eval()
+    model.to(device)
+    for j, sample in enumerate(testset):
+        img = sample['img'].to(device)
+        score = sample['score'].to(device)
+        score_pred = model(img)
+        loss_val_ += bce_loss(score_pred, score).item()
+        acc_val_ += accuracy(score_pred, score)
+    avg_loss, avg_acc = loss_val_/(j+1), acc_val_/(j+1)
+    return avg_loss, avg_acc
+
 def main():
     model_assess = model.FaceAssess()
     start_epoch = 0
@@ -63,6 +77,9 @@ def main():
     ], lr=args.lr)
 
     best_val_acc, best_val_loss = 0., 10
+    if args.resume: # 继续训练需要将最后模型在测试集上的表现设为当前最优
+        best_val_loss, best_val_acc = evaluate(model_assess, val_loader, device_test)
+        print('Last model val_acc: %.4f\tval_loss: %.4f'%(best_val_acc, best_val_loss))
     for epoch in range(start_epoch, start_epoch+args.epochs):
         loss_, acc_ = 0., 0.
         model_assess.train()
@@ -84,17 +101,7 @@ def main():
             logger.step()
         print('epoch %d acc: %.4f\t loss: %.4f' %(epoch, acc_/(i+1), loss_/(i+1)))
 
-        # eval on valid set
-        loss_val_, acc_val_ = 0., 0.
-        model_assess.eval()
-        model_assess.to(device_test)
-        for j, sample in enumerate(val_loader):
-            img = sample['img'].to(device_test)
-            score = sample['score'].to(device_test)
-            score_pred = model_assess(img)
-            loss_val_ += bce_loss(score_pred, score).item()
-            acc_val_ += accuracy(score_pred, score)
-        avg_loss, avg_acc = loss_val_/(j+1), acc_val_/(j+1)
+        avg_loss, avg_acc = evaluate(model_assess, val_loader, device_test)
         print('\teval acc: %.4f\t loss: %.4f' %(avg_acc, avg_loss))
         if avg_loss <= best_val_loss and avg_acc > best_val_acc:
             best_val_loss = avg_loss
